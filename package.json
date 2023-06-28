@@ -1,0 +1,54 @@
+{
+  "name": "@rain-star/postcss-pxtorem",
+  "version": "0.0.1",
+  "description": "✨ a postcss plugin that transform px to rem",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zz8023wanjin/pxtorem.git"
+  },
+  "scripts": {
+    "dev": "tsup --watch",
+    "build": "tsup",
+    "release": "standard-version && pnpm changelog",
+    "lint": "eslint .",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
+  },
+  "keywords": [
+    "px2rem",
+    "pxtorem",
+    "postcss",
+    "css",
+    "rem",
+    "postcss-plugin",
+    "postcss-pxtorem"
+  ],
+  "author": "@rain-star <https://github.com/zz8023wanjin>",
+  "license": "MIT",
+  "peerDependencies": {
+    "postcss": ">=8.0.0"
+  },
+  "devDependencies": {
+    "@rain-star/eslint-config-ts": "^0.0.13",
+    "@rain-star/ts-config": "^0.0.13",
+    "@types/node": "^20.3.2",
+    "conventional-changelog": "^4.0.0",
+    "eslint": "^8.43.0",
+    "postcss": "^8.4.24",
+    "standard-version": "^9.5.0",
+    "tsup": "^7.1.0",
+    "typescript": "^5.1.5"
+  },
+}

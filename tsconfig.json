@@ -1,0 +1,3 @@
+{
+  "extends": "@rain-star/ts-config/tsconfig.base"
+}
