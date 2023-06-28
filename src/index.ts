@@ -100,6 +100,7 @@ function createPropListMatcher(propList) {
 
 const pxtorem = (options: Options = {}) => {
   const opts: Options = Object.assign({}, defaults, options)
+
   const satisfyPropList = createPropListMatcher(opts.propList)
   const exclude = opts.exclude
   let isExcludeFile = false
@@ -110,7 +111,7 @@ const pxtorem = (options: Options = {}) => {
       const filePath = css.source.input.file
       if (
         exclude &&
-        ((type.isFunction(exclude) && exclude(filePath)) ||
+        ((type.isFunction(exclude) && typeof exclude === 'function' && exclude(filePath)) ||
           (type.isString(exclude) && filePath.indexOf(exclude) !== -1) ||
           filePath.match(exclude) !== null)
       ) {
@@ -123,19 +124,24 @@ const pxtorem = (options: Options = {}) => {
       pxReplace = createPxReplace(rootValue, opts.unitPrecision, opts.minPixelValue)
     },
     Declaration(decl) {
-      if (isExcludeFile) return
+      if (isExcludeFile) {
+        return
+      }
 
       if (
         decl.value.indexOf('px') === -1 ||
         !satisfyPropList(decl.prop) ||
         blacklistedSelector(opts.selectorBlackList, decl.parent.selector)
-      )
+      ) {
         return
+      }
 
       const value = decl.value.replace(pxRegex, pxReplace)
 
       // if rem unit already exists, do not add or replace
-      if (declarationExists(decl.parent, decl.prop, value)) return
+      if (declarationExists(decl.parent, decl.prop, value)) {
+        return
+      }
 
       if (opts.replace) {
         decl.value = value
@@ -144,10 +150,14 @@ const pxtorem = (options: Options = {}) => {
       }
     },
     AtRule(atRule) {
-      if (isExcludeFile) return
+      if (isExcludeFile) {
+        return
+      }
 
       if (opts.mediaQuery && atRule.name === 'media') {
-        if (atRule.params.indexOf('px') === -1) return
+        if (atRule.params.indexOf('px') === -1) {
+          return
+        }
         atRule.params = atRule.params.replace(pxRegex, pxReplace)
       }
     },
