@@ -27,6 +27,7 @@
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./index.d.ts",
+  "type": "module",
   "files": [
     "dist"
   ],
@@ -34,21 +35,22 @@
     "dev": "tsup --watch",
     "build": "tsup",
     "release": "standard-version",
-    "lint": "eslint .",
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
+    "lint": "eslint . --fix",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
+    "bump": "bumpp packages/*/package.json -c -p -t --all -x \"pnpm run changelog\""
   },
   "peerDependencies": {
     "postcss": ">=8.0.0"
   },
   "devDependencies": {
-    "@rain-star/eslint-config-ts": "^0.0.13",
-    "@rain-star/ts-config": "^0.0.13",
-    "@types/node": "^20.3.2",
-    "conventional-changelog-cli": "^3.0.0",
-    "eslint": "^8.43.0",
-    "postcss": "^8.4.24",
-    "standard-version": "^9.5.0",
-    "tsup": "^7.1.0",
-    "typescript": "^5.1.5"
+    "@rain-star/eslint-config": "^0.0.14",
+    "@rain-star/tsconfig": "^0.0.14",
+    "@types/node": "^20.8.9",
+    "bumpp": "^9.2.0",
+    "conventional-changelog-cli": "^4.1.0",
+    "eslint": "^8.52.0",
+    "postcss": "^8.4.31",
+    "tsup": "^7.2.0",
+    "typescript": "^5.2.2"
   }
 }

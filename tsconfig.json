@@ -1,3 +1,6 @@
 {
-  "extends": "@rain-star/ts-config/tsconfig.base"
+  "extends": "@rain-star/tsconfig/tsconfig.base",
+  "compilerOptions": {
+    "noImplicitAny": false
+  }
 }
