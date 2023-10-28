@@ -1,7 +1,7 @@
 import { pxRegex } from './utils/pixel-unit-regex'
 import { filterPropList } from './utils/filter-prop-list'
 import { type } from './utils/type'
-import type { Input } from 'postcss'
+import type { Input, Plugin, Root } from 'postcss'
 
 export type Options = Partial<{
   rootValue: number | ((input: Input | undefined) => number)
@@ -98,7 +98,7 @@ function createPropListMatcher(propList) {
   }
 }
 
-const pxtorem = (options: Options = {}) => {
+const pxtorem = (options: Options = {}): Plugin => {
   const opts: Options = Object.assign({}, defaults, options)
 
   const satisfyPropList = createPropListMatcher(opts.propList)
@@ -107,8 +107,8 @@ const pxtorem = (options: Options = {}) => {
   let pxReplace
   return {
     postcssPlugin: 'postcss-pxtorem',
-    Once(css) {
-      const filePath = css.source.input.file
+    Once(css: Root) {
+      const filePath = css.source?.input.file
       if (
         exclude &&
         ((type.isFunction(exclude) && typeof exclude === 'function' && exclude(filePath)) ||

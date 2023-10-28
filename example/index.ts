@@ -1,6 +1,6 @@
 const fs = require('fs')
 const postcss = require('postcss')
-const pxtorem = require('../dist/index.js')
+const pxtorem = require('../dist/index.cjs')
 
 const css = fs.readFileSync('main.css', 'utf8')
 

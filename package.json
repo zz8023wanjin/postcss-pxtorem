@@ -27,17 +27,15 @@
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./index.d.ts",
-  "type": "module",
   "files": [
     "dist"
   ],
   "scripts": {
     "dev": "tsup --watch",
     "build": "tsup",
-    "release": "standard-version",
     "lint": "eslint . --fix",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
-    "bump": "bumpp packages/*/package.json -c -p -t --all -x \"pnpm run changelog\""
+    "bump": "bumpp package.json -c -p -t --all -x \"pnpm run changelog\""
   },
   "peerDependencies": {
     "postcss": ">=8.0.0"
