@@ -34,6 +34,7 @@
     "dev": "tsup --watch",
     "build": "tsup",
     "lint": "eslint . --fix",
+    "test": "vitest",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
     "bump": "bumpp package.json -c -p -t --all -x \"pnpm run changelog\""
   },
@@ -43,12 +44,17 @@
   "devDependencies": {
     "@rain-star/eslint-config": "^0.0.14",
     "@rain-star/tsconfig": "^0.0.14",
+    "@types/lodash": "^4.14.200",
     "@types/node": "^20.8.9",
     "bumpp": "^9.2.0",
     "conventional-changelog-cli": "^4.1.0",
     "eslint": "^8.52.0",
     "postcss": "^8.4.31",
     "tsup": "^7.2.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "vitest": "^0.34.6"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21"
   }
 }

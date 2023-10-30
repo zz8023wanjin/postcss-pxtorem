@@ -1,12 +1,11 @@
 import { pxRegex } from './utils/pixel-unit-regex'
 import { filterPropList } from './utils/filter-prop-list'
-import { type } from './utils/type'
 import type { Input, Plugin, Root } from 'postcss'
+import { isFunction, isRegExp, isString } from 'lodash'
 
 export type Options = Partial<{
   rootValue: number | ((input: Input | undefined) => number)
   unitPrecision: number
-  selectorBlackList: (string | RegExp)[]
   propList: string[]
   replace: boolean
   mediaQuery: boolean
@@ -14,10 +13,9 @@ export type Options = Partial<{
   exclude: string | RegExp | ((filePath: string) => boolean) | null
 }>
 
-const defaults: Options = {
+const defaults: Required<Options> = {
   rootValue: 16,
   unitPrecision: 5,
-  selectorBlackList: [],
   propList: ['font', 'font-size', 'line-height', 'letter-spacing'],
   replace: true,
   mediaQuery: false,
@@ -25,8 +23,14 @@ const defaults: Options = {
   exclude: null,
 }
 
-function createPxReplace(rootValue, unitPrecision, minPixelValue) {
-  return (m, $1) => {
+function toFixed(number: number, precision: number) {
+  const multiplier = Math.pow(10, precision + 1),
+    wholeNumber = Math.floor(number * multiplier)
+  return (Math.round(wholeNumber / 10) * 10) / multiplier
+}
+
+function createPxReplace(rootValue: number, unitPrecision: number, minPixelValue: number) {
+  return (m: string, $1: string) => {
     if (!$1) return m
     const pixels = parseFloat($1)
     if (pixels < minPixelValue) return m
@@ -35,24 +39,8 @@ function createPxReplace(rootValue, unitPrecision, minPixelValue) {
   }
 }
 
-function toFixed(number, precision) {
-  const multiplier = Math.pow(10, precision + 1),
-    wholeNumber = Math.floor(number * multiplier)
-  return (Math.round(wholeNumber / 10) * 10) / multiplier
-}
-
 function declarationExists(decls, prop, value) {
   return decls.some((decl) => decl.prop === prop && decl.value === value)
-}
-
-function blacklistedSelector(blacklist, selector) {
-  if (typeof selector !== 'string') return
-  return blacklist.some((regex) => {
-    if (typeof regex === 'string') {
-      return selector.indexOf(regex) !== -1
-    }
-    return selector.match(regex)
-  })
 }
 
 function createPropListMatcher(propList) {
@@ -99,7 +87,7 @@ function createPropListMatcher(propList) {
 }
 
 const pxtorem = (options: Options = {}): Plugin => {
-  const opts: Options = Object.assign({}, defaults, options)
+  const opts: Required<Options> = Object.assign({}, defaults, options)
 
   const satisfyPropList = createPropListMatcher(opts.propList)
   const exclude = opts.exclude
@@ -108,19 +96,19 @@ const pxtorem = (options: Options = {}): Plugin => {
   return {
     postcssPlugin: 'postcss-pxtorem',
     Once(css: Root) {
-      const filePath = css.source?.input.file
+      const filePath = css.source?.input.file!
       if (
         exclude &&
-        ((type.isFunction(exclude) && typeof exclude === 'function' && exclude(filePath)) ||
-          (type.isString(exclude) && filePath.indexOf(exclude) !== -1) ||
-          filePath.match(exclude) !== null)
+        ((isFunction(exclude) && exclude(filePath)) ||
+          (isString(exclude) && filePath.indexOf(exclude) !== -1) ||
+          (isRegExp(exclude) && filePath.match(exclude) !== null))
       ) {
         isExcludeFile = true
       } else {
         isExcludeFile = false
       }
 
-      const rootValue = typeof opts.rootValue === 'function' ? opts.rootValue(css.source.input) : opts.rootValue
+      const rootValue = isFunction(opts.rootValue) ? opts.rootValue(css.source?.input) : opts.rootValue
       pxReplace = createPxReplace(rootValue, opts.unitPrecision, opts.minPixelValue)
     },
     Declaration(decl) {
@@ -128,11 +116,7 @@ const pxtorem = (options: Options = {}): Plugin => {
         return
       }
 
-      if (
-        decl.value.indexOf('px') === -1 ||
-        !satisfyPropList(decl.prop) ||
-        blacklistedSelector(opts.selectorBlackList, decl.parent.selector)
-      ) {
+      if (decl.value.indexOf('px') === -1 || !satisfyPropList(decl.prop)) {
         return
       }
 
