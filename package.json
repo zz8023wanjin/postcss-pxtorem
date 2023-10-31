@@ -1,6 +1,6 @@
 {
   "name": "@rain-star/postcss-pxtorem",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "✨ a postcss plugin that transform px to rem",
   "author": "@rain-star <https://github.com/zz8023wanjin>",
   "license": "MIT",
