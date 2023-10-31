@@ -1,3 +1,12 @@
+## [0.0.8](https://github.com/zz8023wanjin/pxtorem/compare/v0.0.7...v0.0.8) (2023-10-31)
+
+
+### Features
+
+* vitest ([dfe846f](https://github.com/zz8023wanjin/pxtorem/commit/dfe846f3a9aa9cd6bcf0d291e36c9f29f931740f))
+
+
+
 ## [0.0.7](https://github.com/zz8023wanjin/pxtorem/compare/v0.0.6...v0.0.7) (2023-10-30)
 
 
